@@ -5,6 +5,7 @@ import scipy.stats as stats
 import BlackScholes as bs
 import ir_risk
 import market_risk
+from cds import CDS
 
 
 def mini1():
@@ -222,11 +223,26 @@ def mini4():
         )
 
 
+def mini5():
+    t = np.array([1, 2, 3, 4, 5])
+    test = np.array([57.284, 57.284, 57.284, 67.802, 78.233])
+    test *= 0.0001
+    test_cds = CDS(1, t, test)
+    surv_prob = test_cds.survival_prob_list()
+
+    with open("mini.txt", "a") as fout:
+        fout.write("survival probabilities:\n")
+        fout.write(f"{surv_prob}\n")
+        fout.write("unconditional default probabilities:\n")
+        fout.write(f"{-np.diff(surv_prob, prepend=1)}\n")
+
+
 def main():
     mini1()
     mini2()
     mini3()
     mini4()
+    mini5()
 
 
 if __name__ == "__main__":
