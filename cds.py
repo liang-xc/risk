@@ -12,9 +12,10 @@ class CDS:
 
     Attributes:
         id
-        maturity
-        spread_curve
+        period
+        spread
         recovery_rate
+        risk_free_rate
     """
 
     id: float
