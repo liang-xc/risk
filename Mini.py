@@ -224,9 +224,14 @@ def mini4():
 
 
 def mini5():
+    # INTC CDS SR
+    # Quote on 03/15/2022
     t = np.array([1, 2, 3, 4, 5])
-    test = np.array([57.284, 57.284, 57.284, 67.802, 78.233])
+    test_bid = np.array([1.80, 4.32, 10.25, 19.73, 24.52])
+    test_ask = np.array([12.66, 17.88, 26.33, 34.84, 44.24])
+    test = (test_ask + test_bid) / 2
     test *= 0.0001
+
     test_cds = CDS(1, t, test)
     surv_prob = test_cds.survival_prob_list()
 
