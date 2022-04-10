@@ -42,16 +42,6 @@ class EuropeanOption:
         ) / (vol * np.sqrt(maturity))
         self.__d2 = self.__d1 - vol * np.sqrt(maturity)
 
-    def N(self, x):
-        return (1 + math.erf(x / np.sqrt(2))) / 2
-
-    def dN(self, x):
-        return 1 / np.sqrt(2 * np.pi) * np.exp(-(x**2) / 2)
-
-    @staticmethod
-    def set_risk_free_rate(r: float) -> None:
-        EuropeanOption.rf = r
-
     def __call__(self, st: float) -> float:
         """
         calculate the option premium for a given stock price
@@ -67,6 +57,28 @@ class EuropeanOption:
             return self.Strike * np.exp(-self.rf * self.Maturity) * self.N(
                 -self.__d2
             ) - st * np.exp(-self.DividendYield * self.Maturity) * self.N(-self.__d1)
+
+    def __str__(self) -> str:
+        if self.CallFlag == 1:
+            return f"{self.__maturity_to_str()} {self.Strike}-strike calls"
+        else:
+            return f"{self.__maturity_to_str()} {self.Strike}-strike puts"
+
+    def __imul__(self, mult: float):
+        self.Multiplier = self.Multiplier * mult
+        self.Strike /= mult
+        self.Spot /= mult
+        return self
+
+    def N(self, x):
+        return (1 + math.erf(x / np.sqrt(2))) / 2
+
+    def dN(self, x):
+        return 1 / np.sqrt(2 * np.pi) * np.exp(-(x**2) / 2)
+
+    @staticmethod
+    def set_risk_free_rate(r: float) -> None:
+        EuropeanOption.rf = r
 
     def price(self) -> float:
         """
@@ -120,18 +132,6 @@ class EuropeanOption:
             return f"{self.Maturity}-years"
         else:
             return f"{self.Maturity*12}-months"
-
-    def __str__(self) -> str:
-        if self.CallFlag == 1:
-            return f"{self.__maturity_to_str()} {self.Strike}-strike calls"
-        else:
-            return f"{self.__maturity_to_str()} {self.Strike}-strike puts"
-
-    def __imul__(self, mult: float):
-        self.Multiplier = self.Multiplier * mult
-        self.Strike /= mult
-        self.Spot /= mult
-        return self
 
 
 def implied_vol(
