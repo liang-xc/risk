@@ -11,8 +11,8 @@
 95% parametric VaR for portfolio PnL is 26498.580147777902
 
 1c. INTC and INTC Call option portfolio VaR calculation:
-95% historical VaR for portfolio is -3.081810934949909
-95% parametric VaR for portfolio is 12.039946125627829
+95% historical VaR for portfolio is -3.080290015905168
+95% parametric VaR for portfolio is 12.03626295653589
 
 2a. Component VaR and Marginal VaR calculation:
 Component VaR of C is 58.077928486421435.
@@ -90,9 +90,11 @@ Replicate CIR:
 28        0.091148  0.085545
 29        0.083408  0.085655
 30        0.076325  0.085758
+3b.
 Bond portfolio of zero coupon bond with 2 years to maturity and coupon bond with 4 years to maturity 4 coupon and semi annual coupon payment.
 Both bond are 100.
 VaR of the bond portfolio is 632.4619886997098.
+
 4a. swap rate for 2~30 yrs
 2:	  0.0672
 3:	  0.0697
@@ -123,6 +125,7 @@ VaR of the bond portfolio is 632.4619886997098.
 28:	  0.0822
 29:	  0.0823
 30:	  0.0824
+
 4b. 1 year forward rates 1 year from now till 29 years from now
 1:	 0.0706
 2:	 0.0754
@@ -153,6 +156,7 @@ VaR of the bond portfolio is 632.4619886997098.
 27:	 0.0898
 28:	 0.0898
 29:	 0.0898
+
 4c. forward curve of next year
 1:	 0.0706
 2:	 0.0730
@@ -186,7 +190,17 @@ VaR of the bond portfolio is 632.4619886997098.
 9 yr swap rate next year:	 0.0806
 10 yr swap rate this year: 	 0.0783
 9 yr swap rate next year is higher. This means that 10 yr swap will have negative value.
+
+5.
 survival probabilities:
 [0.998795, 0.9963987921282227, 0.9909502397720048, 0.9817134795476664, 0.9708809447814188]
 unconditional default probabilities:
 [0.001205   0.00239621 0.00544855 0.00923676 0.01083253]
+
+6.
+At and sigma_t is: 
+[2.13494336e+11 1.77980835e-02]
+DD: 129.6410144120307
+PD: 0.0
+expected recovery: 0.0
+

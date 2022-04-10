@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 
-import BlackScholes as bs
+import credit_risk
 import ir_risk
 import market_risk
 from cds import CDS
+from EuropeanOption import EuropeanOption
 
 
 def mini1():
@@ -57,19 +58,14 @@ def mini1():
     call = []
     cport_dV = []
     for i in range(1, len(inteldf)):
-        option = bs.european_option(
-            inteldf["Close"][i],
-            50,
-            0,
-            0.05,
-            inteldf["Close"].std(),
-            inteldf["Maturity"][i],
+        option = EuropeanOption(
+            inteldf["Close"][i], 50, inteldf["Maturity"][i], inteldf["Close"].std(), 0
         )
         call.append(option.price())
         cport_dV.append(inteldf["PnL"] * (1 + option.delta()))
 
-    delta = bs.european_option(
-        inteldf["Close"][1], 50, 0, 0.05, inteldf["Close"].std(), inteldf["Maturity"][i]
+    delta = EuropeanOption(
+        inteldf["Close"][1], 50, inteldf["Maturity"][i], inteldf["Close"].std(), 0
     ).delta()
     cport_std = inteldf["Close"].std() * 1 * (1 + delta)
     cport_pVaR = stats.norm.ppf(0.95) * cport_std
@@ -175,11 +171,13 @@ def mini3():
     n = np.array([100, 100]).T
     var = stats.norm.ppf(0.95) * np.sqrt((n.dot(variance_covariance_matrix)).dot(n.T))
     with open("mini.txt", "a") as fout:
+        fout.write("3b.\n")
         fout.write(
             "Bond portfolio of zero coupon bond with 2 years to maturity and coupon bond with 4 years to maturity 4 coupon and semi annual coupon payment.\n"
         )
         fout.write("Both bond are 100.\n")
         fout.write(f"VaR of the bond portfolio is {var}.\n")
+        fout.write("\n")
 
 
 def mini4():
@@ -197,6 +195,8 @@ def mini4():
             sr = ir_risk.swap_rate(i, v_discount)
             fout.write(f"{i}:\t {sr: .4f}\n")
 
+        fout.write("\n")
+
         # 4b. 1 year forward rates 1 year from now till 29 years from now
         fout.write("4b. 1 year forward rates 1 year from now till 29 years from now\n")
         for i, f in v_forward.items():
@@ -204,6 +204,8 @@ def mini4():
                 pass
             else:
                 fout.write(f"{i - 1}:\t {f:.4f}\n")
+
+        fout.write("\n")
 
         # 4c. forward curve of next year
         forward_curve_next = ir_risk.forward_curve(1, v_discount)
@@ -221,6 +223,7 @@ def mini4():
         fout.write(
             "9 yr swap rate next year is higher. This means that 10 yr swap will have negative value.\n"
         )
+        fout.write("\n")
 
 
 def mini5():
@@ -236,10 +239,35 @@ def mini5():
     surv_prob = test_cds.survival_prob_list()
 
     with open("mini.txt", "a") as fout:
+        fout.write("5.\n")
         fout.write("survival probabilities:\n")
         fout.write(f"{surv_prob}\n")
         fout.write("unconditional default probabilities:\n")
         fout.write(f"{-np.diff(surv_prob, prepend=1)}\n")
+        fout.write("\n")
+
+
+def mini6():
+    # INTC data
+    intc_std = 4_771_000_000
+    intc_ltd = 33_805_000_000
+    intc_e = 192_250_000_000
+
+    inteldf = pd.read_csv("./HW1_data/INTC.csv")
+    intc_return = inteldf["Close"].pct_change()
+    intc_e_sigma = np.std(intc_return)
+
+    intc_kmv = credit_risk.KMV(intc_std, intc_ltd, intc_e, intc_e_sigma)
+
+    with open("mini.txt", "a") as fout:
+        fout.write("6.\n")
+        fout.write("At and sigma_t is: \n")
+        fout.write(f"{intc_kmv.KMV_solver}\n")
+
+        fout.write(f"DD: {intc_kmv.distance_to_default()}\n")
+        fout.write(f"PD: {intc_kmv.probability_of_default()}\n")
+        fout.write(f"expected recovery: {intc_kmv.expected_recovery()}\n")
+        fout.write("\n")
 
 
 def main():
@@ -248,6 +276,7 @@ def main():
     mini3()
     mini4()
     mini5()
+    mini6()
 
 
 if __name__ == "__main__":
