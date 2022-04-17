@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from functools import cached_property
 
 import numpy as np
-import pandas as pd
 from scipy import optimize, stats
 
 
@@ -12,12 +11,12 @@ class KMV:
     a class to represent a KMV model
 
     Attributes:
-    STD: short term debt
-    LTD: long term debt
-    Et: equity value
-    sigma_E: equity volatility
-    tao: time to maturity
-    r: risk-free rate
+        STD: short term debt
+        LTD: long term debt
+        Et: equity value
+        sigma_E: equity volatility
+        tao: time to maturity
+        r: risk-free rate
     """
 
     STD: float

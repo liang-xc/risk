@@ -1,5 +1,4 @@
 import math
-from cmath import inf
 
 import numpy as np
 from scipy.optimize import root
@@ -30,7 +29,7 @@ class EuropeanOption:
         self.DividendYield = div
         self.Multiplier = mult
 
-        if call_flag == 1 or call_flag == -1:
+        if call_flag == 1 or call_flag == 0:
             self.CallFlag = call_flag
         else:
             raise ValueError(
@@ -58,7 +57,7 @@ class EuropeanOption:
                 -self.__d2
             ) - st * np.exp(-self.DividendYield * self.Maturity) * self.N(-self.__d1)
 
-    def __str__(self) -> str:
+    def __str__(self):
         if self.CallFlag == 1:
             return f"{self.__maturity_to_str()} {self.Strike}-strike calls"
         else:
@@ -70,10 +69,10 @@ class EuropeanOption:
         self.Spot /= mult
         return self
 
-    def N(self, x):
+    def N(self, x) -> float:
         return (1 + math.erf(x / np.sqrt(2))) / 2
 
-    def dN(self, x):
+    def dN(self, x) -> float:
         return 1 / np.sqrt(2 * np.pi) * np.exp(-(x**2) / 2)
 
     @staticmethod
@@ -148,45 +147,3 @@ def implied_vol(
 
     iv = root(err, 0.01).x
     return iv
-
-
-def main():
-    print("Call option: ")
-    call_sample = EuropeanOption(100, 100, 1, 0.3, 0, 1, 1)
-    print(f"1. {call_sample}")
-    print(f"price: {call_sample.price()}")
-    print(f"delta: {call_sample.delta()}")
-    print(f"gamma: {call_sample.gamma()}")
-    print(f"vega: {call_sample.vega()}")
-    print(f"theta: {call_sample.theta()}")
-
-    call_sample *= 10
-    print("2. ", call_sample)
-    print(f"price: {call_sample.price()}")
-    print(f"delta: {call_sample.delta()}")
-    print(f"gamma: {call_sample.gamma()}")
-    print(f"vega: {call_sample.vega()}")
-    print(f"theta: {call_sample.theta()}")
-
-    print(f"3. {call_sample(9)}")
-
-    print("Put option: ")
-    put_sample = EuropeanOption(100, 100, 1, 0.3, 0, 1, -1)
-    print(f"1. {put_sample}")
-    print(f"delta: {put_sample.delta()}")
-    print(f"gamma: {put_sample.gamma()}")
-    print(f"vega: {put_sample.vega()}")
-    print(f"theta: {put_sample.theta()}")
-
-    put_sample *= 2
-    print(f"2. {put_sample}")
-    print(f"delta: {put_sample.delta()}")
-    print(f"gamma: {put_sample.gamma()}")
-    print(f"vega: {put_sample.vega()}")
-    print(f"theta: {put_sample.theta()}")
-
-    print(f"3. {put_sample(45)}")
-
-
-if __name__ == "__main__":
-    main()
