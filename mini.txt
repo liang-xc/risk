@@ -204,3 +204,9 @@ DD: 129.6410144120307
 PD: 0.0
 expected recovery: 0.0
 
+7.
+5% VaR is 0.0359
+nu is 38
+xi is -0.4518 and beta is 0.0896
+u_star is -0.0148
+

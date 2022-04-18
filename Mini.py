@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
+import yfinance
 
 import credit_risk
 import ir_risk
@@ -270,6 +271,37 @@ def mini6():
         fout.write("\n")
 
 
+def mini7():
+    # intc_option = fetch_option_data("INTC")
+
+    # fig = plt.figure()
+    # ax = fig.add_subplot(projection="3d")
+    # ax.plot_trisurf(
+    #    intc_option["Maturity"],
+    #    intc_option["strike"],
+    #    intc_option["impliedVolatility"],
+    #    linewidth=0.2,
+    #    antialiased=True,
+    # )
+
+    # fig.savefig("iv surface.png", format="png", dpi=800)
+
+    intc = yfinance.Ticker("INTC")
+    intc_df = intc.history(start="2017-1-1", end="2022-1-1", interval="1d")
+    intc_df = market_risk.generate_return_pnl(intc_df)
+    intc_hist = intc_df["Return"].to_numpy()
+    intc_evt = market_risk.EVT(intc_hist)
+    params = intc_evt.parameter_estimation()
+
+    with open("mini.txt", "a") as fout:
+        fout.write("7.\n")
+        fout.write(f"5% VaR is {intc_evt.u:.4f}\n")
+        fout.write(f"nu is {intc_evt.nu}\n")
+        fout.write(f"xi is {params[0]:.4f} and beta is {params[1]:.4f}\n")
+        fout.write(f"u_star is {intc_evt.u_star():.4f}\n")
+        fout.write("\n")
+
+
 def main():
     mini1()
     mini2()
@@ -277,6 +309,7 @@ def main():
     mini4()
     mini5()
     mini6()
+    mini7()
 
 
 if __name__ == "__main__":
