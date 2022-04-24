@@ -22,7 +22,7 @@ class CDS:
     period: np.ndarray
     spread: np.ndarray
     recovery_rate: float = 0.4
-    risk_free_rate: float = 0.05
+    risk_free_rate: float = 0.02
 
     def __hash__(self) -> int:
         return hash(self.id)
