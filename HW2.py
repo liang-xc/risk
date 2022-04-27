@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 import credit_risk
+from cds import CDS
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
@@ -25,7 +26,21 @@ def main():
     debt_info = pd.read_csv(
         "./HW2_data/debt_info.csv", index_col=["Ticker"], thousands=","
     )
+    # CDS boostrap
+    for t in portfolio_component:
+        try:
+            df = pd.read_csv(f"./CDS_data/{t}.csv")
+        except FileNotFoundError:
+            continue
 
+        maturities = np.array([1, 2])
+        mid = (df["Bid"] + df["Ask"]) / 2
+        mid = mid.to_numpy()
+        mid = mid * 1e-4
+        t_cds = CDS(t, maturities, mid[:2])
+        surv_prob = t_cds.survival_prob_list()
+        print(f"{t} default probability according to CDS spread:")
+        print(-np.diff(surv_prob, prepend=1))
     # KMV
     for t in portfolio_component:
         df = pd.read_csv(f"./HW1_data/{t}.csv")

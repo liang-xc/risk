@@ -18,7 +18,7 @@ class CDS:
         risk_free_rate
     """
 
-    id: float
+    id: str
     period: np.ndarray
     spread: np.ndarray
     recovery_rate: float = 0.4
