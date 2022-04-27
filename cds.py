@@ -30,9 +30,10 @@ class CDS:
     @cached_property
     def discount_factor(self) -> np.ndarray:
         """
-        calculate discount factors for period
-        rf: risk-free rate
-        return discount factors in chronological order
+        calculate discount factors for the period
+
+        Returns:
+            np.ndarray: discount factors in chronological order
         """
 
         return np.array([np.exp(-self.risk_free_rate * t) for t in self.period])
@@ -40,9 +41,13 @@ class CDS:
     @cache
     def survival_prob(self, idx: int) -> float:
         """
-        calculates the survival probabilities at idx
-        based on back-of-the-envelop formula and recursive algorithm
+        survival probability at idx
 
+        Args:
+            idx (int): number of period
+
+        Returns:
+            float: survival probability
         """
 
         if idx == 0:
@@ -80,7 +85,9 @@ class CDS:
 
     def survival_prob_list(self) -> list[float]:
         """
-        calculates all survival probability within maturity
-        return: list of probability in chronological order
+        all survival probability within maturity
+
+        Returns:
+            list[float]: list of survival probabilities
         """
         return [self.survival_prob(i) for i in range(len(self.period))]
