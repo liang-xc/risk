@@ -44,7 +44,7 @@ class CDS:
         survival probability at idx
 
         Args:
-            idx (int): number of period
+            idx (int): index of period
 
         Returns:
             float: survival probability
