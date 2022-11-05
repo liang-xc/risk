@@ -229,10 +229,10 @@ def swap_rate(tao: float, discount_factors: dict[float:float]) -> float:
     # calculate forward rates
     forward_curve = yield_to_forward(yield_curve)
 
-    nominator = 0
+    numerator = 0
     denominator = 0
     for t in range(1, tao + 1):
-        nominator += discount_factors[t] * forward_curve[t]
+        numerator += discount_factors[t] * forward_curve[t]
         denominator += discount_factors[t]
 
-    return nominator / denominator
+    return numerator / denominator
